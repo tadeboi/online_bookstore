@@ -1,0 +1,4 @@
+// POST /api/payments/123/ussd
+{
+    "ussdCode": "*123*1234#"
+}
