@@ -57,6 +57,8 @@ online-bookstore/
 │   │   │       ├── config/
 │   │   │       ├── controller/
 │   │   │       ├── domain/
+                ├── dto/
+                ├── exception/
 │   │   │       ├── repository/
 │   │   │       ├── service/
 │   │   │       └── security/
