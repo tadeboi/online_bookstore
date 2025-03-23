@@ -1,19 +1,28 @@
 package com.bookstore.repository;
 
 import com.bookstore.domain.Order;
+import com.bookstore.domain.OrderStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    // Example of a custom query
-    @Query("SELECT o FROM Order o WHERE o.user.id = ?1 AND o.status = 'PENDING'")
-    List<Order> findPendingOrdersByUserId(Long userId);
+    Page<Order> findByUserIdOrderByOrderDateDesc(Long userId, Pageable pageable);
     
-    // Example of a native SQL query
-    @Query(value = "SELECT * FROM orders o WHERE o.user_id = ?1 AND YEAR(o.order_date) = ?2", 
-           nativeQuery = true)
-    List<Order> findOrdersByUserAndYear(Long userId, Integer year);
+    Optional<Order> findByIdAndUserId(Long id, Long userId);
+    
+    List<Order> findByStatus(OrderStatus status);
+    
+    @Query("SELECT o FROM Order o WHERE o.orderDate BETWEEN :startDate AND :endDate")
+    List<Order> findOrdersInDateRange(LocalDateTime startDate, LocalDateTime endDate);
+    
+    @Query("SELECT o FROM Order o JOIN FETCH o.items WHERE o.id = :orderId")
+    Optional<Order> findByIdWithItems(Long orderId);
 }

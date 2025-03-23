@@ -1,10 +1,13 @@
 package com.bookstore.domain;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal;
+import lombok.Getter;
+import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "carts")
 public class Cart {
@@ -18,47 +21,4 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> items = new ArrayList<>();
-
-    // Getters
-    public Long getId() {
-        return id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public List<CartItem> getItems() {
-        return items;
-    }
-
-    public BigDecimal getTotalAmount() {
-        return items.stream()
-            .map(item -> item.getBook().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    // Setters
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public void setItems(List<CartItem> items) {
-        this.items = items;
-    }
-
-    // Helper methods
-    public void addItem(CartItem item) {
-        items.add(item);
-        item.setCart(this);
-    }
-
-    public void removeItem(CartItem item) {
-        items.remove(item);
-        item.setCart(null);
-    }
 }

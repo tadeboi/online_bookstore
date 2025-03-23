@@ -2,7 +2,12 @@ package com.bookstore.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "cart_items")
 public class CartItem {
@@ -18,41 +23,8 @@ public class CartItem {
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
+    @NotNull
     @Min(1)
     @Column(nullable = false)
     private Integer quantity;
-
-    // Getters
-    public Long getId() {
-        return id;
-    }
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public Book getBook() {
-        return book;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    // Setters
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
-
-    public void setBook(Book book) {
-        this.book = book;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
 }

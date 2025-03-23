@@ -1,16 +1,21 @@
 package com.bookstore.service;
 
 import com.bookstore.domain.Book;
+import com.bookstore.domain.Genre;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
-import java.util.Optional;
 
 public interface BookService {
-    Book saveBook(Book book);
-    Optional<Book> findById(Long id);
-    List<Book> findByTitle(String title);
-    List<Book> findByAuthor(String author);
-    List<Book> findByGenre(Genre genre);
-    List<Book> findByPublicationYear(Integer year);
-    void updateStock(Long bookId, Integer quantity);
+    Book createBook(Book book);
+    Book updateBook(Long id, Book book);
     void deleteBook(Long id);
+    Book getBookById(Long id);
+    Book getBookByIsbn(String isbn);
+    Page<Book> searchBooks(String query, Pageable pageable);
+    Page<Book> getBooksByGenre(Genre genre, Pageable pageable);
+    Page<Book> getBooksByAuthor(String author, Pageable pageable);
+    List<Book> getBooksWithLowStock(int threshold);
+    void updateStock(Long bookId, int quantity);
 }

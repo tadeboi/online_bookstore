@@ -1,8 +1,12 @@
 package com.bookstore.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import java.math.BigDecimal;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "order_items")
 public class OrderItem {
@@ -23,46 +27,4 @@ public class OrderItem {
 
     @Column(nullable = false)
     private BigDecimal priceAtPurchase;
-
-    // Getters
-    public Long getId() {
-        return id;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public Book getBook() {
-        return book;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public BigDecimal getPriceAtPurchase() {
-        return priceAtPurchase;
-    }
-
-    // Setters
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
-    }
-
-    public void setBook(Book book) {
-        this.book = book;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public void setPriceAtPurchase(BigDecimal priceAtPurchase) {
-        this.priceAtPurchase = priceAtPurchase;
-    }
 }

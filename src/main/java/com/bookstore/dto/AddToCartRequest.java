@@ -6,10 +6,10 @@ import lombok.Data;
 
 @Data
 public class AddToCartRequest {
-    @NotNull
+    @NotNull(message = "Book ID cannot be null")
     private Long bookId;
 
-    @NotNull
-    @Min(1)
+    @NotNull(message = "Quantity cannot be null")
+    @Min(value = 1, message = "Quantity must be at least 1")
     private Integer quantity;
 }

@@ -1,9 +1,16 @@
 package com.bookstore.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 import java.math.BigDecimal;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "books")
 public class Book {
@@ -11,93 +18,39 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Pattern(regexp = "^[a-zA-Z0-9\\s]+$")
+    @NotBlank
+    @Size(max = 100)
     @Column(nullable = false)
     private String title;
 
+    @NotBlank
+    @Size(max = 100)
+    @Column(nullable = false)
+    private String author;
+
+    @NotBlank
+    @Size(max = 13)
+    @Column(unique = true, nullable = false)
+    private String isbn;
+
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Genre genre;
 
-    @Pattern(regexp = "^[0-9-]+$")
-    @Column(nullable = false, unique = true)
-    private String isbn;
-
-    @Column(nullable = false)
-    private String author;
-
+    @NotNull
     @Column(nullable = false)
     private Integer publicationYear;
 
+    @NotNull
+    @Positive
     @Column(nullable = false)
     private BigDecimal price;
 
+    @NotNull
     @Column(nullable = false)
     private Integer stockQuantity;
 
-    // Getters
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Genre getGenre() {
-        return genre;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public Integer getPublicationYear() {
-        return publicationYear;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public Integer getStockQuantity() {
-        return stockQuantity;
-    }
-
-    // Setters
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setGenre(Genre genre) {
-        this.genre = genre;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public void setPublicationYear(Integer publicationYear) {
-        this.publicationYear = publicationYear;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public void setStockQuantity(Integer stockQuantity) {
-        this.stockQuantity = stockQuantity;
-    }
+    @Size(max = 1000)
+    private String description;
 }

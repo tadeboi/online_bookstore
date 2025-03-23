@@ -28,8 +28,13 @@ cd online-bookstore
 ```
 
 2. Configure MySQL:
+# Ensure MySQL is running on localhost:3306
+# Default credentials:
+username: root
+password: root
 ```sql
 CREATE DATABASE bookstore;
+
 ```
 
 3. Update application.properties:

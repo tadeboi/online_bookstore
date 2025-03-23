@@ -6,11 +6,12 @@ import com.bookstore.exception.PaymentNotFoundException;
 import com.bookstore.repository.PaymentRepository;
 import com.bookstore.service.OrderService;
 import com.bookstore.service.PaymentService;
+import com.bookstore.util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -27,9 +28,8 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setAmount(order.getTotalAmount());
         payment.setPaymentMethod(paymentMethod);
         payment.setStatus(PaymentStatus.PENDING);
-        payment.setCreatedAt(LocalDateTime.now());
+        payment.setCreatedAt(DateTimeUtil.getCurrentUtcDateTime());
 
-        // Generate payment details based on method
         switch (paymentMethod) {
             case WEB:
                 payment.setTransactionReference(generateReference("WEB"));
@@ -50,16 +50,15 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional
     public PaymentResponse processWebPayment(Long paymentId, String transactionReference) {
-        Payment payment = getPayment(paymentId);
+        Payment payment = getPaymentById(paymentId);
         validatePaymentMethod(payment, PaymentMethod.WEB);
 
-        // Simulate web payment processing
         payment.setStatus(PaymentStatus.PROCESSING);
         payment.setTransactionReference(transactionReference);
         paymentRepository.save(payment);
 
         // Simulate async payment processing
-        simulateAsyncPaymentProcessing(paymentId);
+        simulatePaymentProcessing(paymentId);
 
         return new PaymentResponse(
             payment.getId(),
@@ -72,10 +71,9 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional
     public PaymentResponse processUssdPayment(Long paymentId, String ussdCode) {
-        Payment payment = getPayment(paymentId);
+        Payment payment = getPaymentById(paymentId);
         validatePaymentMethod(payment, PaymentMethod.USSD);
 
-        // Simulate USSD payment processing
         payment.setStatus(PaymentStatus.PROCESSING);
         payment.setUssdCode(ussdCode);
         paymentRepository.save(payment);
@@ -91,10 +89,9 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional
     public PaymentResponse processTransferPayment(Long paymentId, String transferReference) {
-        Payment payment = getPayment(paymentId);
+        Payment payment = getPaymentById(paymentId);
         validatePaymentMethod(payment, PaymentMethod.TRANSFER);
 
-        // Simulate bank transfer processing
         payment.setStatus(PaymentStatus.PROCESSING);
         payment.setTransferReference(transferReference);
         paymentRepository.save(payment);
@@ -112,26 +109,29 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Payment getPaymentById(Long paymentId) {
+        return paymentRepository.findById(paymentId)
+            .orElseThrow(() -> new PaymentNotFoundException("Payment not found"));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Payment> getUserPayments(Long userId) {
+        return paymentRepository.findByUserId(userId);
+    }
+
+    @Override
     @Transactional
-    public void simulatePaymentCallback(Long paymentId, boolean successful) {
-        Payment payment = getPayment(paymentId);
+    public void handlePaymentCallback(Long paymentId, boolean successful) {
+        Payment payment = getPaymentById(paymentId);
         payment.setStatus(successful ? PaymentStatus.COMPLETED : PaymentStatus.FAILED);
-        payment.setCompletedAt(LocalDateTime.now());
+        payment.setCompletedAt(DateTimeUtil.getCurrentUtcDateTime());
         paymentRepository.save(payment);
 
         if (successful) {
             orderService.updateOrderStatus(payment.getOrder().getId(), OrderStatus.PAID);
         }
-    }
-
-    @Override
-    public Payment getPaymentStatus(Long paymentId) {
-        return getPayment(paymentId);
-    }
-
-    private Payment getPayment(Long paymentId) {
-        return paymentRepository.findById(paymentId)
-            .orElseThrow(() -> new PaymentNotFoundException("Payment not found"));
     }
 
     private void validatePaymentMethod(Payment payment, PaymentMethod expectedMethod) {
@@ -144,12 +144,12 @@ public class PaymentServiceImpl implements PaymentService {
         return prefix + "-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
-    private void simulateAsyncPaymentProcessing(Long paymentId) {
-        // Simulate async processing with a separate thread
+    private void simulatePaymentProcessing(Long paymentId) {
+        // In a real application, this would be handled by a separate thread or message queue
         new Thread(() -> {
             try {
                 Thread.sleep(5000); // Simulate 5-second processing time
-                simulatePaymentCallback(paymentId, Math.random() > 0.1); // 90% success rate
+                handlePaymentCallback(paymentId, Math.random() > 0.1); // 90% success rate
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
