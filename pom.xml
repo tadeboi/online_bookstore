@@ -13,8 +13,6 @@
     <groupId>com.bookstore</groupId>
     <artifactId>online-bookstore</artifactId>
     <version>1.0.0</version>
-    <name>online-bookstore</name>
-    <description>Online Book Store with Spring Boot</description>
     
     <properties>
         <java.version>21</java.version>
@@ -66,13 +64,6 @@
             <scope>runtime</scope>
         </dependency>
         
-        <!-- Utilities -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        
         <!-- Testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -91,14 +82,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
             </plugin>
         </plugins>
     </build>

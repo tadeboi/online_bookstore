@@ -2,11 +2,8 @@ package com.bookstore.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.math.BigDecimal;
 
-@Data
-@NoArgsConstructor
 @Entity
 @Table(name = "books")
 public class Book {
@@ -14,7 +11,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Pattern(regexp = "^[a-zA-Z0-9\\s]+$", message = "Title must contain only letters and numbers")
+    @Pattern(regexp = "^[a-zA-Z0-9\\s]+$")
     @Column(nullable = false)
     private String title;
 
@@ -22,7 +19,7 @@ public class Book {
     @Column(nullable = false)
     private Genre genre;
 
-    @Pattern(regexp = "^[0-9-]+$", message = "ISBN must contain only numbers and dashes")
+    @Pattern(regexp = "^[0-9-]+$")
     @Column(nullable = false, unique = true)
     private String isbn;
 
@@ -33,17 +30,74 @@ public class Book {
     private Integer publicationYear;
 
     @Column(nullable = false)
-    private Double price;
+    private BigDecimal price;
 
     @Column(nullable = false)
     private Integer stockQuantity;
-}
 
-public enum Genre {
-    FICTION,
-    THRILLER,
-    MYSTERY,
-    POETRY,
-    HORROR,
-    SATIRE
+    // Getters
+    public Long getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public Genre getGenre() {
+        return genre;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public Integer getPublicationYear() {
+        return publicationYear;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public Integer getStockQuantity() {
+        return stockQuantity;
+    }
+
+    // Setters
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setGenre(Genre genre) {
+        this.genre = genre;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setPublicationYear(Integer publicationYear) {
+        this.publicationYear = publicationYear;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public void setStockQuantity(Integer stockQuantity) {
+        this.stockQuantity = stockQuantity;
+    }
 }
