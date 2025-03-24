@@ -1,6 +1,6 @@
 # Online Book Store
 
-A professional online bookstore implementation using Spring Boot 3.2.3, JWT authentication, and MySQL database.
+A professional online bookstore implementation using Spring Boot 3.3.10, JWT authentication, and MySQL database.
 
 ## Features
 

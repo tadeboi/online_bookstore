@@ -1,21 +1,20 @@
 package com.bookstore.dto;
 
-import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@Setter
+@NoArgsConstructor
 public class ErrorResponse {
-    private final String message;
-    private final LocalDateTime timestamp;
+    private int status;
+    private String message;
+    private String path;
 
-    public ErrorResponse(String message) {
+    public ErrorResponse(int status, String message, String path) {
+        this.status = status;
         this.message = message;
-        this.timestamp = LocalDateTime.now();
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
+        this.path = path;
     }
 }

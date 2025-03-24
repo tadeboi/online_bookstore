@@ -1,7 +1,10 @@
 package com.bookstore.domain;
 
 public enum PaymentMethod {
-    WEB,
+    CREDIT_CARD,
+    DEBIT_CARD,
+    TRANSFER,
     USSD,
-    TRANSFER
+    CASH,
+    WEB
 }

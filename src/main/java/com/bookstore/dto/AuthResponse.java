@@ -1,13 +1,20 @@
 package com.bookstore.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 public class AuthResponse {
     private String token;
-    private String tokenType = "Bearer";
-    private Long userId;
     private String username;
+    private String role;
+
+    public AuthResponse(String token, String username, String role) {
+        this.token = token;
+        this.username = username;
+        this.role = role;
+    }
 }
